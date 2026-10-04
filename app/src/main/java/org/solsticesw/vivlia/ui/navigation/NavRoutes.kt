@@ -10,25 +10,27 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Source
 import androidx.compose.ui.graphics.vector.ImageVector
+import dev.icerock.moko.resources.StringResource
+import org.solsticesw.vivlia.i18n.MR
 
 sealed class NavRoute(
     val route: String,
-    val title: String,
+    val titleRes: StringResource,
     val icon: ImageVector? = null,
 ) {
-    data object Home : NavRoute("home", "Home", Icons.Rounded.Home)
-    data object Library : NavRoute("library", "Library", Icons.AutoMirrored.Rounded.LibraryBooks)
-    data object Browse : NavRoute("browse", "Browse", Icons.Rounded.Explore)
-    data object Search : NavRoute("search", "Search", Icons.Rounded.Search)
-    data object Repositories : NavRoute("repositories", "Repositories", Icons.Rounded.Source)
-    data object History : NavRoute("history", "History", Icons.Rounded.History)
-    data object Settings : NavRoute("settings", "Settings", Icons.Rounded.Settings)
+    data object Home : NavRoute("home", MR.strings.nav_home, Icons.Rounded.Home)
+    data object Library : NavRoute("library", MR.strings.nav_library, Icons.AutoMirrored.Rounded.LibraryBooks)
+    data object Browse : NavRoute("browse", MR.strings.nav_browse, Icons.Rounded.Explore)
+    data object Search : NavRoute("search", MR.strings.nav_search, Icons.Rounded.Search)
+    data object Repositories : NavRoute("repositories", MR.strings.nav_repositories, Icons.Rounded.Source)
+    data object History : NavRoute("history", MR.strings.nav_history, Icons.Rounded.History)
+    data object Settings : NavRoute("settings", MR.strings.nav_settings, Icons.Rounded.Settings)
 
-    data object Details : NavRoute("details/{entryId}", "Entry Details", Icons.Rounded.AutoStories) {
+    data object Details : NavRoute("details/{entryId}", MR.strings.nav_details, Icons.Rounded.AutoStories) {
         fun createRoute(entryId: Long) = "details/$entryId"
     }
 
-    data object Reader : NavRoute("reader/{entryId}/{chapterId}", "Reader") {
+    data object Reader : NavRoute("reader/{entryId}/{chapterId}", MR.strings.nav_reader) {
         fun createRoute(entryId: Long, chapterId: Long) = "reader/$entryId/$chapterId"
     }
 

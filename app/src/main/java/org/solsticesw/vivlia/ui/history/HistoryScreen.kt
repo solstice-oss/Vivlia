@@ -40,8 +40,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import dev.icerock.moko.resources.compose.stringResource
 import org.solsticesw.vivlia.data.local.entity.LibraryEntryEntity
 import org.solsticesw.vivlia.data.local.entity.ReadingSessionEntity
+import org.solsticesw.vivlia.i18n.MR
 import org.solsticesw.vivlia.ui.theme.VivliaTheme
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -68,12 +70,12 @@ fun HistoryScreen(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Reading History",
+                    text = stringResource(MR.strings.reading_history),
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "Recently read titles and sessions",
+                    text = stringResource(MR.strings.recently_read_subtitle),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -83,7 +85,7 @@ fun HistoryScreen(
                 IconButton(onClick = onAskClearHistory) {
                     Icon(
                         imageVector = Icons.Rounded.DeleteSweep,
-                        contentDescription = "Clear History",
+                        contentDescription = stringResource(MR.strings.clear_history),
                         tint = MaterialTheme.colorScheme.error
                     )
                 }
@@ -115,13 +117,13 @@ fun HistoryScreen(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "No reading history yet",
+                        text = stringResource(MR.strings.no_reading_history),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Titles you read will automatically appear here.",
+                        text = stringResource(MR.strings.reading_history_empty_message),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -150,16 +152,16 @@ fun HistoryScreen(
         if (uiState.showClearConfirmation) {
             AlertDialog(
                 onDismissRequest = onDismissClearHistory,
-                title = { Text("Clear Reading History?") },
-                text = { Text("This will permanently remove all reading history sessions. Your library entries will not be affected.") },
+                title = { Text(stringResource(MR.strings.clear_history_title)) },
+                text = { Text(stringResource(MR.strings.clear_history_message)) },
                 confirmButton = {
                     Button(onClick = onConfirmClearHistory) {
-                        Text("Clear All")
+                        Text(stringResource(MR.strings.clear_history))
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = onDismissClearHistory) {
-                        Text("Cancel")
+                        Text(stringResource(MR.strings.action_cancel))
                     }
                 }
             )

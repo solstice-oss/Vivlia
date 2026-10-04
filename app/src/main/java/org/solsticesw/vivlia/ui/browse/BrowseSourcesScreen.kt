@@ -41,8 +41,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import dev.icerock.moko.resources.compose.stringResource
 import org.solsticesw.vivlia.data.local.entity.SourceEntity
 import org.solsticesw.vivlia.domain.model.RemoteEntry
+import org.solsticesw.vivlia.i18n.MR
 import org.solsticesw.vivlia.ui.theme.VivliaTheme
 
 @Composable
@@ -67,7 +69,7 @@ fun BrowseSourcesScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 IconButton(onClick = { onSelectSource(null) }) {
-                    Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back")
+                    Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = stringResource(MR.strings.action_back))
                 }
                 Text(
                     text = uiState.selectedSource.name,
@@ -76,7 +78,7 @@ fun BrowseSourcesScreen(
                     modifier = Modifier.weight(1f)
                 )
                 IconButton(onClick = onRefreshCatalog) {
-                    Icon(Icons.Rounded.Refresh, contentDescription = "Refresh")
+                    Icon(Icons.Rounded.Refresh, contentDescription = stringResource(MR.strings.action_refresh))
                 }
             }
 
@@ -108,7 +110,7 @@ fun BrowseSourcesScreen(
                 }
             } else if (uiState.catalogEntries.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("No catalog results found.")
+                    Text(stringResource(MR.strings.no_catalog_results))
                 }
             } else {
                 LazyVerticalGrid(
@@ -131,7 +133,7 @@ fun BrowseSourcesScreen(
                 .padding(16.dp)
         ) {
             Text(
-                text = "Sources & Extensions",
+                text = stringResource(MR.strings.sources_extensions),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -141,7 +143,7 @@ fun BrowseSourcesScreen(
             if (uiState.sources.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(
-                        text = "No active sources. Please add a repository in Repository Manager.",
+                        text = stringResource(MR.strings.no_active_sources),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

@@ -37,8 +37,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import dev.icerock.moko.resources.compose.stringResource
 import org.solsticesw.vivlia.data.local.entity.SourceEntity
 import org.solsticesw.vivlia.domain.model.RemoteEntry
+import org.solsticesw.vivlia.i18n.MR
 import org.solsticesw.vivlia.ui.theme.VivliaTheme
 
 @Composable
@@ -55,7 +57,7 @@ fun GlobalSearchScreen(
             .padding(16.dp)
     ) {
         Text(
-            text = "Global Search",
+            text = stringResource(MR.strings.global_search),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
@@ -65,14 +67,14 @@ fun GlobalSearchScreen(
         OutlinedTextField(
             value = uiState.query,
             onValueChange = onQueryChanged,
-            placeholder = { Text("Search across all sources...") },
+            placeholder = { Text(stringResource(MR.strings.search_all_sources)) },
             leadingIcon = { Icon(Icons.Rounded.Search, contentDescription = null) },
             trailingIcon = {
                 if (uiState.isSearching) {
                     CircularProgressIndicator(modifier = Modifier.size(24.dp))
                 } else {
                     IconButton(onClick = onSearch) {
-                        Icon(Icons.Rounded.Search, contentDescription = "Search")
+                        Icon(Icons.Rounded.Search, contentDescription = stringResource(MR.strings.action_search))
                     }
                 }
             },
@@ -91,7 +93,7 @@ fun GlobalSearchScreen(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     CircularProgressIndicator()
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text("Searching active sources...")
+                    Text(stringResource(MR.strings.searching_sources))
                 }
             }
         } else if (uiState.sourceResults.isEmpty()) {
@@ -100,7 +102,7 @@ fun GlobalSearchScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = if (uiState.query.isBlank()) "Enter a term to search enabled sources." else "No results found across sources.",
+                    text = if (uiState.query.isBlank()) stringResource(MR.strings.search_prompt_empty) else stringResource(MR.strings.no_search_results),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -160,7 +162,7 @@ fun SourceSearchResultSection(
                 )
             } else if (result.entries.isEmpty()) {
                 Text(
-                    text = "No entries found.",
+                    text = stringResource(MR.strings.no_entries_found),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(vertical = 8.dp)
@@ -214,7 +216,7 @@ fun SearchResultCard(
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.BookmarkAdd,
-                        contentDescription = "Add to Library",
+                        contentDescription = stringResource(MR.strings.add_to_library),
                         tint = MaterialTheme.colorScheme.primary
                     )
                 }

@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import dev.icerock.moko.resources.compose.stringResource
 import org.solsticesw.vivlia.data.local.AppDatabase
 import org.solsticesw.vivlia.data.repository.LibraryRepository
 import org.solsticesw.vivlia.data.repository.ThemeMode
@@ -116,13 +117,14 @@ fun VivliaAppScaffold() {
                         NavigationBar {
                             NavRoute.TOP_LEVEL_ROUTES.forEach { dest ->
                                 val iconVector = dest.icon ?: Icons.Rounded.Home
+                                val title = stringResource(dest.titleRes)
                                 NavigationBarItem(
                                     selected = activeRoute == dest,
                                     onClick = { navigateToTopLevel(dest) },
                                     icon = {
-                                        Icon(iconVector, contentDescription = dest.title)
+                                        Icon(iconVector, contentDescription = title)
                                     },
-                                    label = { Text(dest.title) }
+                                    label = { Text(title) }
                                 )
                             }
                         }
@@ -139,13 +141,14 @@ fun VivliaAppScaffold() {
                         NavigationRail {
                             NavRoute.TOP_LEVEL_ROUTES.forEach { dest ->
                                 val iconVector = dest.icon ?: Icons.Rounded.Home
+                                val title = stringResource(dest.titleRes)
                                 NavigationRailItem(
                                     selected = activeRoute == dest,
                                     onClick = { navigateToTopLevel(dest) },
                                     icon = {
-                                        Icon(iconVector, contentDescription = dest.title)
+                                        Icon(iconVector, contentDescription = title)
                                     },
-                                    label = { Text(dest.title) }
+                                    label = { Text(title) }
                                 )
                             }
                         }

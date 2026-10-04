@@ -34,8 +34,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.icerock.moko.resources.compose.stringResource
 import org.solsticesw.vivlia.data.repository.AppSettings
 import org.solsticesw.vivlia.data.repository.ThemeMode
+import org.solsticesw.vivlia.i18n.MR
 import org.solsticesw.vivlia.ui.theme.VivliaTheme
 
 @Composable
@@ -60,7 +62,7 @@ fun SettingsScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = "Settings",
+            text = stringResource(MR.strings.settings),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
@@ -83,7 +85,7 @@ fun SettingsScreen(
                         modifier = Modifier.weight(1f)
                     )
                     IconButton(onClick = onDismissCacheMessage) {
-                        Icon(Icons.Rounded.Close, contentDescription = "Dismiss")
+                        Icon(Icons.Rounded.Close, contentDescription = stringResource(MR.strings.dismiss))
                     }
                 }
             }
@@ -105,14 +107,14 @@ fun SettingsScreen(
                         tint = MaterialTheme.colorScheme.primary
                     )
                     Text(
-                        text = " Appearance",
+                        text = stringResource(MR.strings.appearance),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
                 }
 
                 Text(
-                    text = "Theme Mode",
+                    text = stringResource(MR.strings.theme_mode),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -121,17 +123,17 @@ fun SettingsScreen(
                     FilterChip(
                         selected = settings.themeMode == ThemeMode.SYSTEM,
                         onClick = { onSetThemeMode(ThemeMode.SYSTEM) },
-                        label = { Text("System") }
+                        label = { Text(stringResource(MR.strings.theme_system)) }
                     )
                     FilterChip(
                         selected = settings.themeMode == ThemeMode.LIGHT,
                         onClick = { onSetThemeMode(ThemeMode.LIGHT) },
-                        label = { Text("Light") }
+                        label = { Text(stringResource(MR.strings.theme_light)) }
                     )
                     FilterChip(
                         selected = settings.themeMode == ThemeMode.DARK,
                         onClick = { onSetThemeMode(ThemeMode.DARK) },
-                        label = { Text("Dark") }
+                        label = { Text(stringResource(MR.strings.theme_dark)) }
                     )
                 }
 
@@ -142,12 +144,12 @@ fun SettingsScreen(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "Dynamic Color",
+                            text = stringResource(MR.strings.dynamic_color),
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Medium
                         )
                         Text(
-                            text = "Use wallpaper colors on Android 12+",
+                            text = stringResource(MR.strings.dynamic_color_summary),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -176,7 +178,7 @@ fun SettingsScreen(
                         tint = MaterialTheme.colorScheme.primary
                     )
                     Text(
-                        text = " Motion & Animations",
+                        text = stringResource(MR.strings.motion_section),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -189,12 +191,12 @@ fun SettingsScreen(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "Material 3 Expressive Motion",
+                            text = stringResource(MR.strings.expressive_motion_title),
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Medium
                         )
                         Text(
-                            text = "Enable bouncy spring physics and morphing transitions",
+                            text = stringResource(MR.strings.expressive_motion_desc),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -212,12 +214,12 @@ fun SettingsScreen(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "Reduced Motion Preference",
+                            text = stringResource(MR.strings.reduced_motion_title),
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Medium
                         )
                         Text(
-                            text = "Minimize animations for accessibility",
+                            text = stringResource(MR.strings.reduced_motion_desc),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -246,7 +248,7 @@ fun SettingsScreen(
                         tint = MaterialTheme.colorScheme.primary
                     )
                     Text(
-                        text = " Repository & Data",
+                        text = stringResource(MR.strings.repo_data_section),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -259,12 +261,12 @@ fun SettingsScreen(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "Auto-Refresh Repositories",
+                            text = stringResource(MR.strings.auto_refresh_repos),
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Medium
                         )
                         Text(
-                            text = "Background synchronization of extension catalogs",
+                            text = stringResource(MR.strings.auto_refresh_repos_desc),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -282,19 +284,19 @@ fun SettingsScreen(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "Clear Cached Manifests",
+                            text = stringResource(MR.strings.clear_cached_manifests),
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Medium
                         )
                         Text(
-                            text = "Free up memory and refresh downloaded manifests",
+                            text = stringResource(MR.strings.clear_cached_desc),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                     Button(onClick = onClearCache) {
                         Icon(Icons.Rounded.CleaningServices, contentDescription = null)
-                        Text(" Clear")
+                        Text(stringResource(MR.strings.clear_button))
                     }
                 }
             }
@@ -316,20 +318,20 @@ fun SettingsScreen(
                         tint = MaterialTheme.colorScheme.primary
                     )
                     Text(
-                        text = " About Vivlia",
+                        text = stringResource(MR.strings.about_vivlia),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
                 }
 
                 Text(
-                    text = "Vivlia v1.0.0",
+                    text = stringResource(MR.strings.about_vivlia_version),
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.SemiBold
                 )
 
                 Text(
-                    text = "A modern, database-first, multi-format reader engine supporting Manga (Mihon specs) and Light Novels (LNReader specs) with Material 3 Expressive UI.",
+                    text = stringResource(MR.strings.about_vivlia_desc),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -337,7 +339,7 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = "Open Source Licenses: Material Design 3, Jetpack Compose, Room, OkHttp, Moshi, Coil.",
+                    text = stringResource(MR.strings.about_licenses),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline
                 )

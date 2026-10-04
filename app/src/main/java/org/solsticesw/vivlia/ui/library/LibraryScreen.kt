@@ -50,7 +50,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import dev.icerock.moko.resources.compose.stringResource
 import org.solsticesw.vivlia.data.local.entity.LibraryEntryEntity
+import org.solsticesw.vivlia.i18n.MR
 import org.solsticesw.vivlia.ui.theme.VivliaTheme
 
 @Composable
@@ -80,7 +82,7 @@ fun LibraryScreen(
             OutlinedTextField(
                 value = uiState.searchQuery,
                 onValueChange = onSearchQueryChanged,
-                placeholder = { Text("Search library...") },
+                placeholder = { Text(stringResource(MR.strings.search_library)) },
                 leadingIcon = { Icon(Icons.Rounded.Search, contentDescription = null) },
                 singleLine = true,
                 modifier = Modifier.weight(1f),
@@ -90,33 +92,33 @@ fun LibraryScreen(
             IconButton(onClick = onToggleLayoutMode) {
                 Icon(
                     imageVector = if (uiState.layoutMode == LibraryLayoutMode.GRID) Icons.AutoMirrored.Rounded.List else Icons.Rounded.GridView,
-                    contentDescription = "Toggle View"
+                    contentDescription = stringResource(MR.strings.toggle_view)
                 )
             }
             Box {
                 IconButton(onClick = { showSortMenu = true }) {
-                    Icon(Icons.AutoMirrored.Rounded.Sort, contentDescription = "Sort Options")
+                    Icon(Icons.AutoMirrored.Rounded.Sort, contentDescription = stringResource(MR.strings.sort_options))
                 }
                 DropdownMenu(
                     expanded = showSortMenu,
                     onDismissRequest = { showSortMenu = false }
                 ) {
                     DropdownMenuItem(
-                        text = { Text("Title") },
+                        text = { Text(stringResource(MR.strings.sort_title)) },
                         onClick = {
                             onSortOptionChanged(LibrarySortOption.TITLE)
                             showSortMenu = false
                         }
                     )
                     DropdownMenuItem(
-                        text = { Text("Recently Added") },
+                        text = { Text(stringResource(MR.strings.sort_recently_added)) },
                         onClick = {
                             onSortOptionChanged(LibrarySortOption.RECENTLY_ADDED)
                             showSortMenu = false
                         }
                     )
                     DropdownMenuItem(
-                        text = { Text("Unread Count") },
+                        text = { Text(stringResource(MR.strings.sort_unread)) },
                         onClick = {
                             onSortOptionChanged(LibrarySortOption.UNREAD)
                             showSortMenu = false
@@ -138,9 +140,9 @@ fun LibraryScreen(
                     text = {
                         Text(
                             when (tab) {
-                                LibraryTab.ALL -> "All"
-                                LibraryTab.MANGA -> "Manga"
-                                LibraryTab.LIGHT_NOVEL -> "Light Novels"
+                                LibraryTab.ALL -> stringResource(MR.strings.tab_all)
+                                LibraryTab.MANGA -> stringResource(MR.strings.tab_manga)
+                                LibraryTab.LIGHT_NOVEL -> stringResource(MR.strings.tab_light_novels)
                             }
                         )
                     }
@@ -159,7 +161,7 @@ fun LibraryScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = if (uiState.searchQuery.isBlank()) "No entries in this library view." else "No matching entries found.",
+                    text = if (uiState.searchQuery.isBlank()) stringResource(MR.strings.library_empty_view) else stringResource(MR.strings.library_empty_search),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

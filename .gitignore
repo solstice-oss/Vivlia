@@ -14,3 +14,5 @@
 .cxx
 local.properties
 /.agent/
+/i18n/build/
+/.idea/

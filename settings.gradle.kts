@@ -24,3 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Vivlia"
 include(":app")
+include(":i18n")

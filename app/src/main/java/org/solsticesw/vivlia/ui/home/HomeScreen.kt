@@ -44,7 +44,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import dev.icerock.moko.resources.compose.stringResource
 import org.solsticesw.vivlia.data.local.entity.LibraryEntryEntity
+import org.solsticesw.vivlia.i18n.MR
 import org.solsticesw.vivlia.ui.theme.VivliaTheme
 
 @Composable
@@ -66,7 +68,7 @@ fun HomeScreen(
     ) {
         // App Title Banner
         Text(
-            text = "Vivlia",
+            text = stringResource(MR.strings.app_name),
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary
@@ -75,7 +77,7 @@ fun HomeScreen(
         // Continue Reading Card
         if (uiState.continueReadingEntry != null) {
             Text(
-                text = "Continue Reading",
+                text = stringResource(MR.strings.continue_reading),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold
             )
@@ -130,9 +132,9 @@ fun HomeScreen(
                             },
                             shape = MaterialTheme.shapes.small
                         ) {
-                            Icon(Icons.Rounded.PlayArrow, contentDescription = "Resume")
+                            Icon(Icons.Rounded.PlayArrow, contentDescription = stringResource(MR.strings.resume))
                             Spacer(modifier = Modifier.width(4.dp))
-                            Text("Resume")
+                            Text(stringResource(MR.strings.resume))
                         }
                     }
                 }
@@ -141,7 +143,7 @@ fun HomeScreen(
 
         // Quick Actions Row
         Text(
-            text = "Quick Actions",
+            text = stringResource(MR.strings.quick_actions),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold
         )
@@ -150,19 +152,19 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             QuickActionButton(
-                title = "Browse",
+                title = stringResource(MR.strings.action_browse),
                 icon = Icons.Rounded.Explore,
                 onClick = onNavigateToBrowse,
                 modifier = Modifier.weight(1f)
             )
             QuickActionButton(
-                title = "Search",
+                title = stringResource(MR.strings.action_search),
                 icon = Icons.Rounded.Search,
                 onClick = onNavigateToSearch,
                 modifier = Modifier.weight(1f)
             )
             QuickActionButton(
-                title = "Repos",
+                title = stringResource(MR.strings.action_repos),
                 icon = Icons.Rounded.Source,
                 onClick = onNavigateToRepositories,
                 modifier = Modifier.weight(1f)
@@ -185,12 +187,12 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 StatItem(
-                    label = "Library Size",
+                    label = stringResource(MR.strings.library_size),
                     value = uiState.totalEntriesCount.toString(),
                     icon = Icons.AutoMirrored.Rounded.MenuBook
                 )
                 StatItem(
-                    label = "Unread Chapters",
+                    label = stringResource(MR.strings.unread_chapters),
                     value = uiState.unreadChaptersCount.toString(),
                     icon = Icons.Rounded.Bookmark
                 )
@@ -200,7 +202,7 @@ fun HomeScreen(
         // Recently Added Section
         if (uiState.recentlyAdded.isNotEmpty()) {
             Text(
-                text = "Recently Added",
+                text = stringResource(MR.strings.recently_added),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold
             )
@@ -236,17 +238,17 @@ fun HomeScreen(
                         tint = MaterialTheme.colorScheme.primary
                     )
                     Text(
-                        text = "Your library is empty",
+                        text = stringResource(MR.strings.empty_library),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "Add extensions or browse sources to discover books and manga to read.",
+                        text = stringResource(MR.strings.empty_library_message),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Button(onClick = onNavigateToBrowse) {
-                        Text("Explore Sources")
+                        Text(stringResource(MR.strings.explore_sources))
                     }
                 }
             }

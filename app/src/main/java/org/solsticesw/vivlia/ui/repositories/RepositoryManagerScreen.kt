@@ -45,8 +45,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.icerock.moko.resources.compose.stringResource
 import org.solsticesw.vivlia.data.local.entity.ExtensionRepositoryEntity
 import org.solsticesw.vivlia.domain.model.ProviderType
+import org.solsticesw.vivlia.i18n.MR
 import org.solsticesw.vivlia.ui.theme.VivliaTheme
 
 @Composable
@@ -74,7 +76,7 @@ fun RepositoryManagerScreen(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             ) {
-                Icon(Icons.Rounded.Add, contentDescription = "Add Repository")
+                Icon(Icons.Rounded.Add, contentDescription = stringResource(MR.strings.add_repository))
             }
         }
     ) { innerPadding ->
@@ -91,12 +93,12 @@ fun RepositoryManagerScreen(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Repository Manager",
+                        text = stringResource(MR.strings.repository_manager),
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "Manage extension sources (Mihon & LNReader)",
+                        text = stringResource(MR.strings.manage_sources_subtitle),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -106,9 +108,9 @@ fun RepositoryManagerScreen(
                     CircularProgressIndicator(modifier = Modifier.padding(8.dp))
                 } else {
                     Button(onClick = onRefreshAllRepositories) {
-                        Icon(Icons.Rounded.Refresh, contentDescription = "Refresh All")
+                        Icon(Icons.Rounded.Refresh, contentDescription = stringResource(MR.strings.refresh_all))
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("Refresh All")
+                        Text(stringResource(MR.strings.refresh_all))
                     }
                 }
             }
@@ -138,7 +140,7 @@ fun RepositoryManagerScreen(
                         IconButton(onClick = onClearMessages) {
                             Icon(
                                 Icons.Rounded.Close,
-                                contentDescription = "Dismiss",
+                                contentDescription = stringResource(MR.strings.dismiss),
                                 tint = if (isError) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onPrimaryContainer
                             )
                         }
@@ -163,15 +165,9 @@ fun RepositoryManagerScreen(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = "No repositories added yet.",
+                            text = stringResource(MR.strings.no_repositories),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "Tap the + button to add a Mihon or LNReader repository URL.",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -197,7 +193,7 @@ fun RepositoryManagerScreen(
         if (uiState.showAddDialog) {
             AlertDialog(
                 onDismissRequest = onCloseAddDialog,
-                title = { Text("Add Extension Repository") },
+                title = { Text(stringResource(MR.strings.add_repository)) },
                 text = {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -206,7 +202,7 @@ fun RepositoryManagerScreen(
                         OutlinedTextField(
                             value = uiState.inputUrl,
                             onValueChange = onInputUrlChanged,
-                            label = { Text("Repository Index URL") },
+                            label = { Text(stringResource(MR.strings.repository_url)) },
                             placeholder = { Text("https://example.com/index.json") },
                             leadingIcon = { Icon(Icons.Rounded.Link, contentDescription = null) },
                             singleLine = true,
@@ -217,14 +213,14 @@ fun RepositoryManagerScreen(
                         OutlinedTextField(
                             value = uiState.customName,
                             onValueChange = onCustomNameChanged,
-                            label = { Text("Custom Name (Optional)") },
+                            label = { Text(stringResource(MR.strings.custom_name)) },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                             shape = MaterialTheme.shapes.medium
                         )
 
                         Text(
-                            text = "Format Selection:",
+                            text = stringResource(MR.strings.repository_format),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold
                         )
@@ -233,12 +229,12 @@ fun RepositoryManagerScreen(
                             FilterChip(
                                 selected = uiState.selectedProviderType == ProviderType.MIHON,
                                 onClick = { onProviderTypeSelected(ProviderType.MIHON) },
-                                label = { Text("Mihon (Manga)") }
+                                label = { Text(stringResource(MR.strings.mihon_manga)) }
                             )
                             FilterChip(
                                 selected = uiState.selectedProviderType == ProviderType.LN_READER,
                                 onClick = { onProviderTypeSelected(ProviderType.LN_READER) },
-                                label = { Text("LNReader (Novels)") }
+                                label = { Text(stringResource(MR.strings.lnreader_novels)) }
                             )
                         }
 
@@ -261,7 +257,7 @@ fun RepositoryManagerScreen(
                                 if (uiState.isTestingConnection) {
                                     CircularProgressIndicator(modifier = Modifier.padding(4.dp))
                                 } else {
-                                    Text("Normalize & Test")
+                                    Text(stringResource(MR.strings.normalize_test))
                                 }
                             }
                         }
@@ -275,13 +271,13 @@ fun RepositoryManagerScreen(
                         if (uiState.isAddingRepository) {
                             CircularProgressIndicator(modifier = Modifier.padding(4.dp))
                         } else {
-                            Text("Add Repository")
+                            Text(stringResource(MR.strings.add_repository))
                         }
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = onCloseAddDialog) {
-                        Text("Cancel")
+                        Text(stringResource(MR.strings.action_cancel))
                     }
                 }
             )
@@ -351,12 +347,12 @@ fun RepositoryCard(
 
                 Row {
                     IconButton(onClick = onRefresh) {
-                        Icon(Icons.Rounded.Refresh, contentDescription = "Refresh")
+                        Icon(Icons.Rounded.Refresh, contentDescription = stringResource(MR.strings.action_refresh))
                     }
                     IconButton(onClick = onDelete) {
                         Icon(
                             Icons.Rounded.Delete,
-                            contentDescription = "Delete",
+                            contentDescription = stringResource(MR.strings.delete),
                             tint = MaterialTheme.colorScheme.error
                         )
                     }
