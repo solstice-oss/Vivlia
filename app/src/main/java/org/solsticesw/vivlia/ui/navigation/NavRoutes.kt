@@ -8,6 +8,7 @@ import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.Storage
 import androidx.compose.material.icons.rounded.Source
 import androidx.compose.ui.graphics.vector.ImageVector
 import dev.icerock.moko.resources.StringResource
@@ -25,6 +26,7 @@ sealed class NavRoute(
     data object Repositories : NavRoute("repositories", MR.strings.nav_repositories, Icons.Rounded.Source)
     data object History : NavRoute("history", MR.strings.nav_history, Icons.Rounded.History)
     data object Settings : NavRoute("settings", MR.strings.nav_settings, Icons.Rounded.Settings)
+    data object Local : NavRoute("local", MR.strings.nav_local, Icons.Rounded.Storage)
 
     data object Details : NavRoute("details/{entryId}", MR.strings.nav_details, Icons.Rounded.AutoStories) {
         fun createRoute(entryId: Long) = "details/$entryId"
@@ -43,6 +45,7 @@ sealed class NavRoute(
                 Search,
                 Repositories,
                 History,
+                Local,
                 Settings,
             )
 

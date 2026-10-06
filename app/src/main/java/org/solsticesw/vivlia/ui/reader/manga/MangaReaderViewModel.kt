@@ -2,6 +2,7 @@ package org.solsticesw.vivlia.ui.reader.manga
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -10,6 +11,7 @@ import kotlinx.coroutines.launch
 import org.solsticesw.vivlia.data.local.entity.ChapterEntity
 import org.solsticesw.vivlia.data.local.entity.PageEntity
 import org.solsticesw.vivlia.data.repository.ReadingProgressRepository
+import org.solsticesw.vivlia.local.LOCAL_SOURCE_ID
 
 enum class MangaReaderMode {
     HORIZONTAL_PAGER,
@@ -68,15 +70,33 @@ class MangaReaderViewModel(
             val prevChapterId = if (currentIndex > 0) allChapters[currentIndex - 1].id else null
             val nextChapterId = if (currentIndex in 0 until allChapters.size - 1) allChapters[currentIndex + 1].id else null
 
-            val fetchedPages = readingProgressRepository.getPagesForChapter(
-                entryId = entryId,
-                chapterId = chapterId,
-                sourceId = entry?.sourceId ?: "",
-                chapterUrl = chapter.url
-            )
+            val isLocal = entry?.sourceId == LOCAL_SOURCE_ID
+            val fetchedPages = try {
+                readingProgressRepository.getPagesForChapter(
+                    entryId = entryId,
+                    chapterId = chapterId,
+                    sourceId = entry?.sourceId ?: "",
+                    chapterUrl = chapter.url
+                )
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (error: Exception) {
+                if (isLocal) {
+                    _uiState.update {
+                        it.copy(isLoading = false, errorMessage = error.message ?: "Local chapter could not be read")
+                    }
+                    return@launch
+                }
+                emptyList()
+            }
 
             val pages = if (fetchedPages.isNotEmpty()) {
                 fetchedPages
+            } else if (isLocal) {
+                _uiState.update {
+                    it.copy(isLoading = false, errorMessage = "This local chapter contains no readable pages")
+                }
+                return@launch
             } else {
                 // Generate sample manga pages if no remote pages found
                 generateSamplePages(chapterId)

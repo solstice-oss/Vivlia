@@ -10,6 +10,8 @@ import org.solsticesw.vivlia.data.repository.HistoryRepository
 import org.solsticesw.vivlia.data.repository.LibraryRepository
 import org.solsticesw.vivlia.data.repository.ReadingProgressRepository
 import org.solsticesw.vivlia.data.repository.SettingsRepository
+import org.solsticesw.vivlia.local.LocalSourceProvider
+import org.solsticesw.vivlia.local.LocalStorageRepository
 import org.solsticesw.vivlia.ui.browse.BrowseViewModel
 import org.solsticesw.vivlia.ui.details.EntryDetailsViewModel
 import org.solsticesw.vivlia.ui.history.HistoryViewModel
@@ -32,7 +34,11 @@ class AppViewModelFactory(
     private val catalogRepository: CatalogRepository by lazy { CatalogRepository(database) }
     private val historyRepository: HistoryRepository by lazy { HistoryRepository(database) }
     private val settingsRepository: SettingsRepository by lazy { SettingsRepository(database) }
-    private val readingProgressRepository: ReadingProgressRepository by lazy { ReadingProgressRepository(database) }
+    private val localStorageRepository: LocalStorageRepository by lazy { LocalStorageRepository(context, database) }
+    private val localSourceProvider: LocalSourceProvider by lazy { LocalSourceProvider(context) }
+    private val readingProgressRepository: ReadingProgressRepository by lazy {
+        ReadingProgressRepository(database, localSourceProvider = localSourceProvider)
+    }
     private val repositoryManager: ExtensionRepositoryManager by lazy { ExtensionRepositoryManager(database) }
 
     @Suppress("UNCHECKED_CAST")
@@ -51,7 +57,15 @@ class AppViewModelFactory(
                 SearchViewModel(catalogRepository, libraryRepository) as T
             }
             modelClass.isAssignableFrom(EntryDetailsViewModel::class.java) -> {
-                EntryDetailsViewModel(entryId, libraryRepository, catalogRepository) as T
+                EntryDetailsViewModel(
+                    entryId,
+                    libraryRepository,
+                    catalogRepository,
+                    sourceProvider = localSourceProvider
+                ) as T
+            }
+            modelClass.isAssignableFrom(org.solsticesw.vivlia.ui.local.LocalStorageViewModel::class.java) -> {
+                org.solsticesw.vivlia.ui.local.LocalStorageViewModel(context, localStorageRepository) as T
             }
             modelClass.isAssignableFrom(MangaReaderViewModel::class.java) -> {
                 MangaReaderViewModel(entryId, chapterId, readingProgressRepository) as T

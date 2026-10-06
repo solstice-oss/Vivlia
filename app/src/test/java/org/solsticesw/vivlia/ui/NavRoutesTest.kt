@@ -11,13 +11,14 @@ class NavRoutesTest {
     @Test
     fun testTopLevelDestinationsList() {
         val topLevel = NavRoute.topLevelDestinations
-        assertEquals(7, topLevel.size)
+        assertEquals(8, topLevel.size)
         assertTrue(topLevel.contains(NavRoute.Home))
         assertTrue(topLevel.contains(NavRoute.Library))
         assertTrue(topLevel.contains(NavRoute.Browse))
         assertTrue(topLevel.contains(NavRoute.Search))
         assertTrue(topLevel.contains(NavRoute.Repositories))
         assertTrue(topLevel.contains(NavRoute.History))
+        assertTrue(topLevel.contains(NavRoute.Local))
         assertTrue(topLevel.contains(NavRoute.Settings))
     }
 
@@ -30,7 +31,7 @@ class NavRoutesTest {
     @Test
     fun testNavRouteProperties() {
         assertEquals("home", NavRoute.Home.route)
-        assertEquals("Home", NavRoute.Home.title)
+        assertNotNull(NavRoute.Home.titleRes)
         assertNotNull(NavRoute.Home.icon)
 
         assertEquals("library", NavRoute.Library.route)
@@ -38,6 +39,7 @@ class NavRoutesTest {
         assertEquals("search", NavRoute.Search.route)
         assertEquals("repositories", NavRoute.Repositories.route)
         assertEquals("history", NavRoute.History.route)
+        assertEquals("local", NavRoute.Local.route)
         assertEquals("settings", NavRoute.Settings.route)
     }
 
@@ -49,6 +51,7 @@ class NavRoutesTest {
         assertEquals(NavRoute.Search, NavRoute.forRoute("search"))
         assertEquals(NavRoute.Repositories, NavRoute.forRoute("repositories"))
         assertEquals(NavRoute.History, NavRoute.forRoute("history"))
+        assertEquals(NavRoute.Local, NavRoute.forRoute("local"))
         assertEquals(NavRoute.Settings, NavRoute.forRoute("settings"))
         assertEquals(NavRoute.Details, NavRoute.forRoute("details/123"))
         assertEquals(NavRoute.Reader, NavRoute.forRoute("reader/123/456"))

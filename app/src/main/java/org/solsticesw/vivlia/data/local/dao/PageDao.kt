@@ -20,4 +20,7 @@ interface PageDao {
 
     @Query("DELETE FROM pages WHERE chapterId = :chapterId")
     suspend fun deletePagesForChapter(chapterId: Long)
+
+    @Query("DELETE FROM pages WHERE chapterId IN (SELECT id FROM chapters WHERE entryId = :entryId)")
+    suspend fun deletePagesForEntry(entryId: Long)
 }

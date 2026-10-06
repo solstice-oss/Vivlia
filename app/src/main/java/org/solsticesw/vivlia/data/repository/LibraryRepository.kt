@@ -9,6 +9,7 @@ import org.solsticesw.vivlia.data.local.entity.EntryGenreEntity
 import org.solsticesw.vivlia.data.local.entity.EntryTagEntity
 import org.solsticesw.vivlia.data.local.entity.EntryTitleEntity
 import org.solsticesw.vivlia.data.local.entity.LibraryEntryEntity
+import org.solsticesw.vivlia.local.LOCAL_SOURCE_ID
 import org.solsticesw.vivlia.domain.model.SourceDescriptor
 import org.solsticesw.vivlia.domain.provider.SourceProvider
 
@@ -17,14 +18,14 @@ class LibraryRepository(private val database: AppDatabase) {
     private val chapterDao = database.chapterDao()
 
     fun getAllLibraryEntriesFlow(): Flow<List<LibraryEntryEntity>> {
-        return libraryEntryDao.getAllLibraryEntriesFlow()
+        return libraryEntryDao.getAllLibraryEntriesFlow(LOCAL_SOURCE_ID)
     }
 
     fun searchLibraryEntriesFlow(query: String): Flow<List<LibraryEntryEntity>> {
         return if (query.isBlank()) {
-            libraryEntryDao.getAllLibraryEntriesFlow()
+            libraryEntryDao.getAllLibraryEntriesFlow(LOCAL_SOURCE_ID)
         } else {
-            libraryEntryDao.searchLibraryEntriesFlow(query)
+            libraryEntryDao.searchLibraryEntriesFlow(query, LOCAL_SOURCE_ID)
         }
     }
 

@@ -44,6 +44,8 @@ import org.solsticesw.vivlia.ui.home.HomeScreen
 import org.solsticesw.vivlia.ui.home.HomeViewModel
 import org.solsticesw.vivlia.ui.library.LibraryScreen
 import org.solsticesw.vivlia.ui.library.LibraryViewModel
+import org.solsticesw.vivlia.ui.local.LocalStorageScreen
+import org.solsticesw.vivlia.ui.local.LocalStorageViewModel
 import org.solsticesw.vivlia.ui.reader.ln.LightNovelReaderScreen
 import org.solsticesw.vivlia.ui.reader.ln.LightNovelReaderViewModel
 import org.solsticesw.vivlia.ui.reader.manga.MangaReaderScreen
@@ -237,6 +239,26 @@ fun VivliaAppScaffold() {
                                                 onDismissClearHistory = vm::dismissClearHistory,
                                                 onConfirmClearHistory = vm::confirmClearHistory,
                                                 onNavigateToDetails = { navigateToDetails(it) }
+                                            )
+                                        }
+                                        NavRoute.Local -> {
+                                            val vm: LocalStorageViewModel = viewModel(
+                                                factory = AppViewModelFactory(context)
+                                            )
+                                            val uiState by vm.uiState.collectAsState()
+                                            LocalStorageScreen(
+                                                uiState = uiState,
+                                                onScan = vm::scan,
+                                                onChangeRoot = vm::setRoot,
+                                                onResetRoot = vm::resetRoot,
+                                                onImport = vm::import,
+                                                onToggleFavorite = vm::toggleFavorite,
+                                                onNavigateToDetails = { navigateToDetails(it) },
+                                                onToggleSelected = vm::toggleSelected,
+                                                onAskDelete = vm::askDelete,
+                                                onDismissDelete = vm::dismissDelete,
+                                                onConfirmDelete = vm::confirmDelete,
+                                                onDismissError = vm::dismissError
                                             )
                                         }
                                         NavRoute.Settings -> {

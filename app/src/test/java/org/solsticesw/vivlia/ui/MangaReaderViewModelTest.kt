@@ -3,8 +3,12 @@ package org.solsticesw.vivlia.ui
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -18,6 +22,7 @@ import org.solsticesw.vivlia.data.local.entity.ChapterEntity
 import org.solsticesw.vivlia.data.local.entity.LibraryEntryEntity
 import org.solsticesw.vivlia.data.repository.ReadingProgressRepository
 import org.solsticesw.vivlia.domain.model.MediaType
+import org.solsticesw.vivlia.local.LOCAL_SOURCE_ID
 import org.solsticesw.vivlia.ui.reader.manga.MangaReaderMode
 import org.solsticesw.vivlia.ui.reader.manga.MangaReaderViewModel
 
@@ -87,5 +92,31 @@ class MangaReaderViewModelTest {
         viewModel.toggleOverlay()
         val toggledState = viewModel.uiState.first { it.showOverlay != initialOverlay }
         assertEquals(!initialOverlay, toggledState.showOverlay)
+    }
+
+    @Test
+    fun localChapterFailureDoesNotGenerateRemoteSamplePages(): Unit = runBlocking {
+        Dispatchers.setMain(UnconfinedTestDispatcher())
+        try {
+            val entryId = database.libraryEntryDao().insert(
+                LibraryEntryEntity(
+                    sourceId = LOCAL_SOURCE_ID,
+                    url = "content://local/manga",
+                    title = "Local manga",
+                    mediaType = MediaType.MANGA.name
+                )
+            )
+            val chapterId = database.chapterDao().insertChapter(
+                ChapterEntity(entryId = entryId, url = "vivlia-local://chapter", name = "Chapter 1")
+            )
+
+            val viewModel = MangaReaderViewModel(entryId, chapterId, repository)
+            val state = viewModel.uiState.first { !it.isLoading }
+
+            assertTrue(state.pages.isEmpty())
+            assertNotNull(state.errorMessage)
+        } finally {
+            Dispatchers.resetMain()
+        }
     }
 }

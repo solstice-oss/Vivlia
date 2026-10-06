@@ -24,4 +24,10 @@ interface BookmarkDao {
 
     @Query("SELECT * FROM bookmarks WHERE chapterId = :chapterId ORDER BY pageIndex ASC")
     suspend fun getBookmarksForChapter(chapterId: Long): List<BookmarkEntity>
+
+    @Query("DELETE FROM bookmarks WHERE chapterId = :chapterId")
+    suspend fun deleteBookmarksForChapter(chapterId: Long)
+
+    @Query("DELETE FROM bookmarks WHERE entryId = :entryId")
+    suspend fun deleteBookmarksForEntry(entryId: Long)
 }

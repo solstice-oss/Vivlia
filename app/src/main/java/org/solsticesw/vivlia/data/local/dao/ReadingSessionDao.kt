@@ -17,4 +17,7 @@ interface ReadingSessionDao {
 
     @Query("SELECT * FROM reading_sessions ORDER BY startTime DESC LIMIT :limit")
     fun getRecentSessionsFlow(limit: Int = 20): Flow<List<ReadingSessionEntity>>
+
+    @Query("DELETE FROM reading_sessions WHERE entryId = :entryId")
+    suspend fun deleteForEntry(entryId: Long)
 }

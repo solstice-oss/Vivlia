@@ -36,11 +36,20 @@ interface LibraryEntryDao {
     @Query("SELECT * FROM library_entries WHERE sourceId = :sourceId AND url = :url LIMIT 1")
     suspend fun getBySourceAndUrl(sourceId: String, url: String): LibraryEntryEntity?
 
-    @Query("SELECT * FROM library_entries WHERE inLibrary = 1 ORDER BY title ASC")
-    fun getAllLibraryEntriesFlow(): Flow<List<LibraryEntryEntity>>
+    @Query("SELECT entry.* FROM library_entries AS entry WHERE entry.inLibrary = 1 AND (entry.sourceId != :localSourceId OR EXISTS (SELECT 1 FROM local_content_index AS local WHERE local.entryId = entry.id AND local.available = 1)) ORDER BY entry.title ASC")
+    fun getAllLibraryEntriesFlow(localSourceId: String): Flow<List<LibraryEntryEntity>>
 
-    @Query("SELECT * FROM library_entries WHERE inLibrary = 1 AND title LIKE '%' || :query || '%' ORDER BY title ASC")
-    fun searchLibraryEntriesFlow(query: String): Flow<List<LibraryEntryEntity>>
+    @Query("SELECT entry.* FROM library_entries AS entry INNER JOIN local_content_index AS local ON local.entryId = entry.id WHERE entry.sourceId = :localSourceId AND local.available = 1 ORDER BY entry.title COLLATE NOCASE ASC")
+    fun getAvailableLocalEntriesFlow(localSourceId: String): Flow<List<LibraryEntryEntity>>
+
+    @Query("SELECT entry.* FROM library_entries AS entry INNER JOIN local_content_index AS local ON local.entryId = entry.id WHERE entry.sourceId = :localSourceId AND local.available = 1 ORDER BY entry.title COLLATE NOCASE ASC")
+    suspend fun getAvailableLocalEntries(localSourceId: String): List<LibraryEntryEntity>
+
+    @Query("SELECT * FROM library_entries WHERE sourceId = :sourceId")
+    suspend fun getEntriesBySource(sourceId: String): List<LibraryEntryEntity>
+
+    @Query("SELECT entry.* FROM library_entries AS entry WHERE entry.inLibrary = 1 AND entry.title LIKE '%' || :query || '%' AND (entry.sourceId != :localSourceId OR EXISTS (SELECT 1 FROM local_content_index AS local WHERE local.entryId = entry.id AND local.available = 1)) ORDER BY entry.title ASC")
+    fun searchLibraryEntriesFlow(query: String, localSourceId: String): Flow<List<LibraryEntryEntity>>
 
     @Query("UPDATE library_entries SET inLibrary = :inLibrary, addedAt = :addedAt WHERE id = :id")
     suspend fun toggleInLibrary(id: Long, inLibrary: Boolean, addedAt: Long = System.currentTimeMillis())

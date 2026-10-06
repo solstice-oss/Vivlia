@@ -2,6 +2,8 @@ package org.solsticesw.vivlia.data.repository
 
 import androidx.room.withTransaction
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CancellationException
+import org.solsticesw.vivlia.local.LOCAL_SOURCE_ID
 import org.solsticesw.vivlia.data.local.AppDatabase
 import org.solsticesw.vivlia.data.local.entity.BookmarkEntity
 import org.solsticesw.vivlia.data.local.entity.ChapterEntity
@@ -15,7 +17,8 @@ import kotlin.math.max
 
 class ReadingProgressRepository(
     private val database: AppDatabase,
-    private val sourceProvider: SourceProvider = DefaultSourceProvider()
+    private val sourceProvider: SourceProvider = DefaultSourceProvider(),
+    private val localSourceProvider: SourceProvider? = null
 ) {
     private val libraryEntryDao = database.libraryEntryDao()
     private val chapterDao = database.chapterDao()
@@ -55,7 +58,12 @@ class ReadingProgressRepository(
                     lang = "en",
                     baseUrl = ""
                 )
-                val remotePages = sourceProvider.getPageList(descriptor, chapterUrl)
+                val provider = if (sourceId == LOCAL_SOURCE_ID) {
+                    checkNotNull(localSourceProvider) { "Local content provider is unavailable" }
+                } else {
+                    sourceProvider
+                }
+                val remotePages = provider.getPageList(descriptor, chapterUrl)
                 if (remotePages.isNotEmpty()) {
                     val entities = remotePages.mapIndexed { idx, page ->
                         PageEntity(
@@ -68,7 +76,10 @@ class ReadingProgressRepository(
                     pageDao.insertPages(entities)
                     return pageDao.getPagesForChapter(chapterId)
                 }
-            } catch (_: Exception) {
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (error: Exception) {
+                if (sourceId == LOCAL_SOURCE_ID) throw error
             }
         }
 
