@@ -16,3 +16,5 @@ local.properties
 /.agent/
 /i18n/build/
 /.idea/
+/source-api/build/
+/source-local/build/

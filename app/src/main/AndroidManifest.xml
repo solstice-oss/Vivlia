@@ -4,6 +4,12 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <queries>
+        <intent>
+            <action android:name="eu.kanade.tachiyomi.EXTENSION" />
+        </intent>
+    </queries>
+
     <application
         android:name=".VivliaApplication"
         android:allowBackup="true"

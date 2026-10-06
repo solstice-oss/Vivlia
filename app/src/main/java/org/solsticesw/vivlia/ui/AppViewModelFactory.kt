@@ -3,6 +3,10 @@ package org.solsticesw.vivlia.ui
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import org.solsticesw.vivlia.data.extension.CompositeCatalogProvider
+import org.solsticesw.vivlia.data.extension.CompositeSourceProvider
+import org.solsticesw.vivlia.data.extension.ExtensionManager
+import org.solsticesw.vivlia.data.extension.MihonSourceAdapter
 import org.solsticesw.vivlia.data.local.AppDatabase
 import org.solsticesw.vivlia.data.network.ExtensionRepositoryManager
 import org.solsticesw.vivlia.data.repository.CatalogRepository
@@ -10,6 +14,8 @@ import org.solsticesw.vivlia.data.repository.HistoryRepository
 import org.solsticesw.vivlia.data.repository.LibraryRepository
 import org.solsticesw.vivlia.data.repository.ReadingProgressRepository
 import org.solsticesw.vivlia.data.repository.SettingsRepository
+import org.solsticesw.vivlia.domain.provider.CatalogProvider
+import org.solsticesw.vivlia.domain.provider.SourceProvider
 import org.solsticesw.vivlia.local.LocalSourceProvider
 import org.solsticesw.vivlia.local.LocalStorageRepository
 import org.solsticesw.vivlia.ui.browse.BrowseViewModel
@@ -30,14 +36,27 @@ class AppViewModelFactory(
 ) : ViewModelProvider.Factory {
 
     private val database: AppDatabase by lazy { AppDatabase.getInstance(context) }
+    private val extensionManager: ExtensionManager by lazy { ExtensionManager(context, database) }
+    private val mihonAdapter: MihonSourceAdapter by lazy { MihonSourceAdapter(extensionManager) }
+    private val localSourceProvider: LocalSourceProvider by lazy { LocalSourceProvider(context) }
+
+    private val catalogProvider: CatalogProvider by lazy {
+        CompositeCatalogProvider(mihonAdapter)
+    }
+
+    private val sourceProvider: SourceProvider by lazy {
+        CompositeSourceProvider(localSourceProvider, mihonAdapter)
+    }
+
     private val libraryRepository: LibraryRepository by lazy { LibraryRepository(database) }
-    private val catalogRepository: CatalogRepository by lazy { CatalogRepository(database) }
+    private val catalogRepository: CatalogRepository by lazy {
+        CatalogRepository(database, catalogProvider = catalogProvider)
+    }
     private val historyRepository: HistoryRepository by lazy { HistoryRepository(database) }
     private val settingsRepository: SettingsRepository by lazy { SettingsRepository(database) }
     private val localStorageRepository: LocalStorageRepository by lazy { LocalStorageRepository(context, database) }
-    private val localSourceProvider: LocalSourceProvider by lazy { LocalSourceProvider(context) }
     private val readingProgressRepository: ReadingProgressRepository by lazy {
-        ReadingProgressRepository(database, localSourceProvider = localSourceProvider)
+        ReadingProgressRepository(database, sourceProvider = sourceProvider, localSourceProvider = localSourceProvider)
     }
     private val repositoryManager: ExtensionRepositoryManager by lazy { ExtensionRepositoryManager(database) }
 
@@ -61,7 +80,7 @@ class AppViewModelFactory(
                     entryId,
                     libraryRepository,
                     catalogRepository,
-                    sourceProvider = localSourceProvider
+                    sourceProvider = sourceProvider
                 ) as T
             }
             modelClass.isAssignableFrom(org.solsticesw.vivlia.ui.local.LocalStorageViewModel::class.java) -> {

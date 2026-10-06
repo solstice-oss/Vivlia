@@ -1,0 +1,81 @@
+/*
+ * Copyright 2015 Tachiyomi Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License me.
+ */
+
+package eu.kanade.tachiyomi.network
+
+import android.webkit.CookieManager
+import okhttp3.Cookie
+import okhttp3.CookieJar
+import okhttp3.HttpUrl
+
+class AndroidCookieJar : CookieJar {
+
+    private val manager by lazy { CookieManager.getInstance() }
+
+    override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
+        val urlString = url.toString()
+        cookies.forEach { manager.setCookie(urlString, it.toString()) }
+    }
+
+    override fun loadForRequest(url: HttpUrl): List<Cookie> {
+        return get(url)
+    }
+
+    fun get(url: HttpUrl): List<Cookie> {
+        val cookies = try {
+            manager.getCookie(url.toString())
+        } catch (_: Exception) {
+            null
+        }
+
+        return if (!cookies.isNullOrEmpty()) {
+            cookies.split(";").mapNotNull { Cookie.parse(url, it) }
+        } else {
+            emptyList()
+        }
+    }
+
+    fun remove(url: HttpUrl, cookieNames: List<String>? = null, maxAge: Int = -1): Int {
+        val urlString = url.toString()
+        val cookies = try {
+            manager.getCookie(urlString) ?: return 0
+        } catch (_: Exception) {
+            return 0
+        }
+
+        fun List<String>.filterNames(): List<String> {
+            return if (cookieNames != null) {
+                this.filter { it in cookieNames }
+            } else {
+                this
+            }
+        }
+
+        return cookies.split(";")
+            .map { it.substringBefore("=").trim() }
+            .filterNames()
+            .onEach { manager.setCookie(urlString, "$it=;Max-Age=$maxAge") }
+            .count()
+    }
+
+    fun removeAll() {
+        try {
+            manager.removeAllCookies {}
+        } catch (_: Exception) {
+            // ignore if WebView/CookieManager is unavailable in tests
+        }
+    }
+}

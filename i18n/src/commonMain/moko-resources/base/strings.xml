@@ -12,6 +12,13 @@
     <string name="nav_details">Entry Details</string>
     <string name="nav_reader">Reader</string>
 
+    <string name="local_source">Local source</string>
+    <string name="local_filter_order_by">Order by</string>
+    <string name="title">Title</string>
+    <string name="date">Date</string>
+    <string name="chapter_not_found">Chapter not found</string>
+    <string name="local_invalid_format">Invalid format</string>
+
     <string name="continue_reading">Continue Reading</string>
     <string name="resume">Resume</string>
     <string name="quick_actions">Quick Actions</string>
