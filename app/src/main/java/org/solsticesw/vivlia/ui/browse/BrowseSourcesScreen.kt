@@ -53,6 +53,7 @@ fun BrowseSourcesScreen(
     onSelectSource: (SourceEntity?) -> Unit,
     onSearchQueryChanged: (String) -> Unit,
     onRefreshCatalog: () -> Unit,
+    onRefreshExtensions: () -> Unit = {},
     onTogglePinSource: (SourceEntity) -> Unit,
     onNavigateToDetails: (Long) -> Unit,
     modifier: Modifier = Modifier
@@ -132,11 +133,24 @@ fun BrowseSourcesScreen(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            Text(
-                text = stringResource(MR.strings.sources_extensions),
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = stringResource(MR.strings.sources_extensions),
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1f)
+                )
+                IconButton(onClick = onRefreshExtensions) {
+                    if (uiState.isRefreshingExtensions) {
+                        CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                    } else {
+                        Icon(Icons.Rounded.Refresh, contentDescription = stringResource(MR.strings.action_refresh))
+                    }
+                }
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -302,6 +316,7 @@ fun BrowseSourcesScreenPreview() {
             onSelectSource = {},
             onSearchQueryChanged = {},
             onRefreshCatalog = {},
+            onRefreshExtensions = {},
             onTogglePinSource = {},
             onNavigateToDetails = {}
         )

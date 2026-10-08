@@ -194,9 +194,10 @@ fun VivliaAppScaffold() {
                                             val uiState by vm.uiState.collectAsState()
                                             BrowseSourcesScreen(
                                                 uiState = uiState,
-                                                onSelectSource = { src -> if (src != null) vm.selectSource(src) },
+                                                onSelectSource = { src -> vm.selectSource(src) },
                                                 onSearchQueryChanged = vm::onSearchQueryChanged,
                                                 onRefreshCatalog = vm::refreshCatalog,
+                                                onRefreshExtensions = vm::refreshExtensions,
                                                 onTogglePinSource = vm::togglePinSource,
                                                 onNavigateToDetails = { navigateToDetails(it) }
                                             )

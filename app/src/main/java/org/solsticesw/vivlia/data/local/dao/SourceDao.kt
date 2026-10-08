@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 import org.solsticesw.vivlia.data.local.entity.SourceEntity
 
@@ -12,6 +13,9 @@ import org.solsticesw.vivlia.data.local.entity.SourceEntity
 interface SourceDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSources(sources: List<SourceEntity>)
+
+    @Upsert
+    suspend fun upsertSources(sources: List<SourceEntity>)
 
     @Update
     suspend fun updateSource(source: SourceEntity)

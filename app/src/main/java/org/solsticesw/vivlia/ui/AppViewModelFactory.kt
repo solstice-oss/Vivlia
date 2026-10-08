@@ -36,7 +36,7 @@ class AppViewModelFactory(
 ) : ViewModelProvider.Factory {
 
     private val database: AppDatabase by lazy { AppDatabase.getInstance(context) }
-    private val extensionManager: ExtensionManager by lazy { ExtensionManager(context, database) }
+    private val extensionManager: ExtensionManager by lazy { ExtensionManager.getInstance(context, database) }
     private val mihonAdapter: MihonSourceAdapter by lazy { MihonSourceAdapter(extensionManager) }
     private val localSourceProvider: LocalSourceProvider by lazy { LocalSourceProvider(context) }
 
@@ -50,7 +50,7 @@ class AppViewModelFactory(
 
     private val libraryRepository: LibraryRepository by lazy { LibraryRepository(database) }
     private val catalogRepository: CatalogRepository by lazy {
-        CatalogRepository(database, catalogProvider = catalogProvider)
+        CatalogRepository(database, catalogProvider = catalogProvider, extensionManager = extensionManager)
     }
     private val historyRepository: HistoryRepository by lazy { HistoryRepository(database) }
     private val settingsRepository: SettingsRepository by lazy { SettingsRepository(database) }
@@ -70,7 +70,7 @@ class AppViewModelFactory(
                 LibraryViewModel(libraryRepository) as T
             }
             modelClass.isAssignableFrom(BrowseViewModel::class.java) -> {
-                BrowseViewModel(catalogRepository) as T
+                BrowseViewModel(catalogRepository, extensionManager) as T
             }
             modelClass.isAssignableFrom(SearchViewModel::class.java) -> {
                 SearchViewModel(catalogRepository, libraryRepository) as T

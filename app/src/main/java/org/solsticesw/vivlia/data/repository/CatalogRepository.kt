@@ -4,6 +4,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import org.solsticesw.vivlia.data.extension.ExtensionManager
 import org.solsticesw.vivlia.data.local.AppDatabase
 import org.solsticesw.vivlia.data.local.entity.SourceEntity
 import org.solsticesw.vivlia.data.network.DefaultCatalogProvider
@@ -13,9 +14,10 @@ import org.solsticesw.vivlia.domain.provider.CatalogProvider
 
 class CatalogRepository(
     private val database: AppDatabase,
-    private val catalogProvider: CatalogProvider = DefaultCatalogProvider()
+    private val catalogProvider: CatalogProvider = DefaultCatalogProvider(),
+    extensionManager: ExtensionManager? = ExtensionManager.getInstanceOrNull()
 ) {
-    private val sourceManager = SourceManager(database)
+    private val sourceManager = SourceManager(database, extensionManager)
 
     fun getAllSourcesFlow(): Flow<List<SourceEntity>> {
         return sourceManager.getAllSourcesFlow()

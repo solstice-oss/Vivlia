@@ -1,7 +1,11 @@
 package org.solsticesw.vivlia.data.network
 
+import eu.kanade.tachiyomi.source.Source
+import eu.kanade.tachiyomi.source.online.HttpSource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
+import org.solsticesw.vivlia.data.extension.ExtensionManager
 import org.solsticesw.vivlia.data.local.AppDatabase
 import org.solsticesw.vivlia.data.local.entity.SourceEntity
 import org.solsticesw.vivlia.domain.model.MediaType
@@ -10,7 +14,8 @@ import org.solsticesw.vivlia.domain.model.SourceDescriptor
 import org.solsticesw.vivlia.local.LOCAL_SOURCE_ID
 
 class SourceManager(
-    private val database: AppDatabase
+    private val database: AppDatabase,
+    private val extensionManager: ExtensionManager? = ExtensionManager.getInstanceOrNull()
 ) {
     private val sourceDao = database.sourceDao()
 
@@ -19,8 +24,42 @@ class SourceManager(
     }
 
     fun getEnabledSourcesFlow(): Flow<List<SourceEntity>> {
-        return sourceDao.getAllSourcesFlow().map { sources ->
-            sources.filter { it.enabled }
+        val extManager = extensionManager ?: ExtensionManager.getInstanceOrNull()
+        val activeSourcesFlow: Flow<List<Source>> = extManager?.activeSourcesFlow ?: flowOf(emptyList())
+
+        return combine(sourceDao.getAllSourcesFlow(), activeSourcesFlow) { dbSources, activeSources ->
+            val result = mutableListOf<SourceEntity>()
+
+            for (dbSource in dbSources) {
+                if (dbSource.enabled) {
+                    result.add(dbSource)
+                }
+            }
+
+            for (active in activeSources) {
+                val activeId = active.id.toString()
+                if (result.none { it.id == activeId }) {
+                    val baseUrl = (active as? HttpSource)?.baseUrl ?: ""
+                    result.add(
+                        SourceEntity(
+                            id = activeId,
+                            extensionId = "",
+                            repoId = "installed_extension",
+                            name = active.name,
+                            lang = active.lang,
+                            baseUrl = baseUrl,
+                            providerType = ProviderType.MIHON.name,
+                            mediaType = MediaType.MANGA.name,
+                            supportsLatest = active.supportsLatest,
+                            isNsfw = false,
+                            pinned = false,
+                            enabled = true
+                        )
+                    )
+                }
+            }
+
+            result.sortedWith(compareByDescending<SourceEntity> { it.pinned }.thenBy { it.name })
         }
     }
 
