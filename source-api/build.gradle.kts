@@ -42,4 +42,7 @@ dependencies {
 
     implementation(libs.androidx.preference)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.webkit)
+
+    implementation(project(":i18n"))
 }

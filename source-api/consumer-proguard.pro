@@ -20,6 +20,9 @@
 -keep class eu.kanade.tachiyomi.source.online.HttpSource { public protected *; }
 -keep class eu.kanade.tachiyomi.source.online.ParsedHttpSource { public protected *; }
 
+# Compatible extensions detect this interceptor by its runtime simple class name.
+-keepnames class eu.kanade.tachiyomi.network.interceptor.CloudflareInterceptor
+
 # Final classes and top-level functions extensions only call into
 -keep,allowoptimization class eu.kanade.tachiyomi.AppInfo { public protected *; }
 -keep,allowoptimization class eu.kanade.tachiyomi.network.HttpException { public protected *; }

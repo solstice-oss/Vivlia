@@ -53,6 +53,7 @@ rxJava = "1.3.8"
 injekt = "1.16.1"
 jsoup = "1.18.3"
 androidxPreference = "1.2.1"
+androidxWebkit = "1.17.1"
 unifile = "08f224c8f9"
 archive = "1.1.7"
 xmlutil = "1.0.2"
@@ -124,6 +125,7 @@ rxjava = { group = "io.reactivex", name = "rxjava", version.ref = "rxJava" }
 injekt = { group = "uy.kohesive.injekt", name = "injekt-core", version.ref = "injekt" }
 jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
 androidx-preference = { group = "androidx.preference", name = "preference-ktx", version.ref = "androidxPreference" }
+androidx-webkit = { group = "androidx.webkit", name = "webkit", version.ref = "androidxWebkit" }
 unifile = { group = "com.github.mihon", name = "unifile", version.ref = "unifile" }
 archive = { group = "me.zhanghai.android.libarchive", name = "library", version.ref = "archive" }
 xmlutil-core = { group = "io.github.pdvrieze.xmlutil", name = "core-android", version.ref = "xmlutil" }
