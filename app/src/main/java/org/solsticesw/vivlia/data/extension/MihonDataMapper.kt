@@ -69,7 +69,7 @@ fun Page.toRemotePage(index: Int, source: Source?): RemotePage {
             for (i in 0 until headers.size) {
                 headersMap[headers.name(i)] = headers.value(i)
             }
-        } catch (_: Exception) {}
+        } catch (_: Throwable) {}
     }
     return RemotePage(
         index = index,

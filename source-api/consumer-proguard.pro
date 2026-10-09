@@ -33,3 +33,5 @@
 -keep,allowoptimization class eu.kanade.tachiyomi.network.interceptor.RateLimitInterceptorKt { public protected *; }
 -keep,allowoptimization class eu.kanade.tachiyomi.network.interceptor.SpecificHostRateLimitInterceptorKt { public protected *; }
 -keep,allowoptimization class eu.kanade.tachiyomi.util.JsoupExtensionsKt { public protected *; }
+-keep,allowoptimization class okhttp3.brotli.** { public protected *; }
+-keep,allowoptimization class okhttp3.zstd.** { public protected *; }

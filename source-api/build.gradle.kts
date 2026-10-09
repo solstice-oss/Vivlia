@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.jsoup)
     implementation(libs.okhttp)
     implementation(libs.okhttp.dnsoverhttps)
+    implementation(libs.okhttp.brotli)
     implementation(libs.logging.interceptor)
 
     implementation(libs.androidx.preference)
